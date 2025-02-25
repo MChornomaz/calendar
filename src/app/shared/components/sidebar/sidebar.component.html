@@ -1,0 +1,9 @@
+<div class="sidebar">
+  @if(sidebarExpanded()) {
+    <div class="sidebar__date" [@fadeIn]>
+      <mat-card class="sidebar__calendar" [@fadeIn]>
+        <mat-calendar #calendar [selected]="currentDate()" (selectedChange)="selectDate($event)"></mat-calendar>
+      </mat-card>
+    </div>
+  }
+</div>

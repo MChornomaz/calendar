@@ -1,0 +1,52 @@
+<header class="header">
+  <div class="header__content">
+    <div class="header__left">
+      <button
+        mat-mini-fab
+        aria-label="Menu button"
+        class="header__menu-button"
+        (click)="toggleSidebar()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <img ngSrc="/assets/images/logo.png"  alt="Logo" width="40" height="40" priority="1"/>
+      <h1 class="header__title">Calendar</h1>
+    </div>
+    <div class="header__controls">
+      <div class="header__controls-left">
+        <button mat-stroked-button class="header__today-btn" (click)="setToday()">Today</button>
+        <div class="header__date-controls">
+          <button
+            mat-mini-fab
+            aria-label="Arrow left button"
+            class="header__arrow-button"
+            (click)="decrementDate()"
+          >
+            <mat-icon>arrow_back_ios</mat-icon>
+          </button>
+          <button
+            mat-mini-fab
+            aria-label="Arrow right button"
+            class="header__arrow-button"
+            (click)="incrementDate()"
+          >
+            <mat-icon>arrow_forward_ios</mat-icon>
+          </button>
+        </div>
+        <h2 class="header__date">{{currentDate() | date: 'MMMM dd, yyyy'}}</h2>
+      </div>
+      <div class="header__controls-right">
+        <button mat-mini-fab aria-label="Search button" class="header__search-button">
+          <mat-icon>search</mat-icon>
+        </button>
+        <mat-form-field class="header__mode-select" appearance="outline" [hideRequiredMarker]="true">
+          <mat-select [value]="dateMode()" (selectionChange)="changeMode($event)" disableOptionCentering  class="header__mode-select-panel" >
+            @for (mode of modeDropdown(); track mode.value) {
+              <mat-option [value]="mode.value">{{mode.viewValue}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</header>

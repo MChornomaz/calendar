@@ -1,1 +1,17 @@
-<h1>Calendar Works</h1>
+<div class="page">
+  <app-header></app-header>
+  <div class="page-content">
+    <button mat-raised-button aria-label="Create event button" class="create-btn" [ngClass]="{'collapsed': !sidebarExpanded()}">
+      <mat-icon>add</mat-icon>
+      @if(sidebarExpanded()) {
+        Create
+      }
+    </button>
+    <app-sidebar class="sidebar" [ngClass]="{'sidebar-active': sidebarExpanded()}"></app-sidebar>
+    <div class="content-wrapper" [ngClass]="{'collapsed': !sidebarExpanded()}">
+      <div class="content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>
