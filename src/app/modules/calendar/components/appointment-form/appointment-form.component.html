@@ -1,0 +1,85 @@
+@if (isModal()) {
+  <div class="modal-header">
+    <button mat-icon-button class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+}
+
+<div class="form-container">
+  <h2>{{ formType() === 'create' ? 'Add Appointment' : 'Edit Appointment' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>Add title</mat-label>
+      <input matInput formControlName="title" required />
+    </mat-form-field>
+
+    @if (!dateEditing()) {
+      <div class="form-container__date-representation" (click)="dateEditing.set(true)">
+        <div class="form-container__date-text">
+          {{ form.get('date')?.value | date: 'fullDate' }}
+        </div>
+        <div class="form-container__time-text">
+          <p>{{ form.get('startTime')?.value }}</p>
+          -
+          <p>{{ form.get('endTime')?.value }}</p>
+        </div>
+      </div>
+    } @else {
+      <div class="form-container__date-edit">
+        <div class="form-container__date-edit-inputs">
+          <mat-form-field class="form-container__date-picker">
+            <input matInput [matDatepicker]="dp" formControlName="date" (focus)="dp.open()" (click)="dp.open()" />
+            <mat-datepicker #dp></mat-datepicker>
+          </mat-form-field>
+          @if (!form.get('duration')?.value) {
+            <div class="form-container__time-range">
+              <mat-form-field>
+                <mat-select formControlName="startTime">
+                  @for (time of timeHours; track time.startTime) {
+                    <mat-option [value]="time.startTime">
+                      {{ time.startTime }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <p>-</p>
+
+              <mat-form-field>
+                <mat-select formControlName="endTime">
+                  @for (time of timeHours; track time.id) {
+                    <mat-option [value]="time.endTime">
+                      {{ time.endTime }}
+                    </mat-option>
+                  }
+                </mat-select>
+                @if (form.get('endTime')?.hasError('invalidTimeRange')) {
+                  <mat-error> End time must be greater than start time </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+        </div>
+
+        <div class="form-container__checkbox-wrapper">
+          <mat-label>Last whole day?</mat-label>
+          <mat-checkbox formControlName="duration"> </mat-checkbox>
+        </div>
+      </div>
+    }
+
+    <mat-form-field>
+      <mat-label>add description</mat-label>
+      <textarea matInput formControlName="description" rows="1"></textarea>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button class="form-container__submit" mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Save</button>
+      @if(formType() === 'edit') {
+        <button class="form-container__cancel" mat-raised-button color="color" type="button" (click)="close()">Cancel</button>
+      }
+    </div>
+  </form>
+</div>

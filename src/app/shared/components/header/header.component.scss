@@ -18,7 +18,7 @@
     min-width: 256px;
   }
 
-  &__menu-button{
+  &__menu-button {
     margin-right: 16px;
     margin-left: 8px;
     width: 50px;
@@ -32,7 +32,7 @@
     margin-left: 12px;
   }
 
-  &__controls{
+  &__controls {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -40,7 +40,7 @@
     padding-left: 16px;
   }
 
-  &__controls-left{
+  &__controls-left {
     width: 50%;
     max-width: 420px;
     display: flex;
@@ -48,28 +48,28 @@
     gap: 12px;
   }
 
-  &__today-btn{
+  &__today-btn {
     color: #000000;
   }
 
-  &__arrow-button{
-    .material-icons{
+  &__arrow-button {
+    .material-icons {
       font-size: 18px;
     }
 
-    .mat-icon{
+    .mat-icon {
       height: 19px;
       width: 16px;
     }
   }
 
-  &__date{
+  &__date {
     color: rgb(31, 31, 31);
     font-size: 22px;
     font-weight: 400;
   }
 
-  &__controls-right{
+  &__controls-right {
     width: 50%;
     max-width: 200px;
     display: flex;
@@ -79,18 +79,17 @@
     padding-right: 12px;
   }
 
-  &__search-button{
-
+  &__search-button {
   }
 
-  &__mode-select{
+  &__mode-select {
     height: 38px;
   }
 
-  &__mode-select-panel{
+  &__mode-select-panel {
     border-radius: 50px;
   }
-  &__mode-select.mat-form-field{
+  &__mode-select.mat-form-field {
     height: 38px;
     border: 1px solid #000000;
     padding: 0 24px;
@@ -100,21 +99,16 @@
     justify-content: center;
   }
 
-
-
-
   ::ng-deep {
-    .mat-mdc-text-field-wrapper{
+    .mat-mdc-text-field-wrapper {
       height: 38px;
       display: flex;
       align-items: center;
       //border-radius: 50px;
-
     }
 
-    .mat-mdc-form-field-subscript-wrapper{
+    .mat-mdc-form-field-subscript-wrapper {
       display: none;
     }
   }
 }
-

@@ -1,7 +1,7 @@
-import {Component, inject, signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {SidebarService} from './core/services/sidebar-service/sidebar.service';
-import {DateRoutingService} from './core/services/date-routing-service/date-routing.service';
+import { SidebarService } from './core/services/sidebar-service/sidebar.service';
+import { DateRoutingService } from './core/services/date-routing-service/date-routing.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ export class AppComponent {
   sidebarExpanded = signal<boolean>(true);
 
   constructor() {
-    this.sidebarExpanded$.subscribe(expanded => this.sidebarExpanded.set(expanded));
-    this.dateRoutingService.init()
+    this.sidebarExpanded$.subscribe((expanded) => this.sidebarExpanded.set(expanded));
+    this.dateRoutingService.init();
   }
 }

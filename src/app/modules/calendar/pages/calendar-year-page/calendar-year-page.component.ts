@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-calendar-year-page',
   standalone: false,
   templateUrl: './calendar-year-page.component.html',
-  styleUrl: './calendar-year-page.component.scss'
+  styleUrl: './calendar-year-page.component.scss',
 })
-export class CalendarYearPageComponent {
-
-}
+export class CalendarYearPageComponent {}

@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-calendar-week-page',
   standalone: false,
   templateUrl: './calendar-week-page.component.html',
-  styleUrl: './calendar-week-page.component.scss'
+  styleUrl: './calendar-week-page.component.scss',
 })
-export class CalendarWeekPageComponent {
-
-}
+export class CalendarWeekPageComponent {}

@@ -1,13 +1,13 @@
-import {inject, Injectable, OnDestroy} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {DateChangeService} from '../date-change-service/date-change.service';
-import {DateMode} from '../../models/date-mode';
-import {combineLatest, distinctUntilChanged, filter, first, Subscription} from 'rxjs';
+import { inject, Injectable, OnDestroy } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { DateChangeService } from '../date-change-service/date-change.service';
+import { DateMode } from '../../models/date-mode';
+import { combineLatest, distinctUntilChanged, filter, first, Subscription } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class DateRoutingService implements OnDestroy{
+export class DateRoutingService implements OnDestroy {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private dateChangeService = inject(DateChangeService);
@@ -21,7 +21,10 @@ export class DateRoutingService implements OnDestroy{
 
   private syncDateFromUrl() {
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd), first())
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        first(),
+      )
       .subscribe(() => {
         const { mode, date } = this.parseRoute();
         if (!this.activatedRoute.snapshot.firstChild?.paramMap.has('year')) {
@@ -37,14 +40,13 @@ export class DateRoutingService implements OnDestroy{
       });
   }
 
-
   private syncDateToUrl() {
-    const sub = combineLatest([this.dateChangeService.dateMode, this.dateChangeService.currentDate])
+    const sub = combineLatest([this.dateChangeService.dateMode$, this.dateChangeService.currentDate$])
       .pipe(
         filter(() => this.isInitialSyncDone),
         distinctUntilChanged(([prevMode, prevDate], [currMode, currDate]) => {
           return prevMode === currMode && prevDate.getTime() === currDate.getTime();
-        })
+        }),
       )
       .subscribe(([mode, date]) => {
         this.updateUrl(mode, date);
@@ -56,7 +58,7 @@ export class DateRoutingService implements OnDestroy{
   private parseRoute(): { mode: DateMode; date: Date } {
     const route = this.activatedRoute.snapshot.firstChild || this.activatedRoute.snapshot;
 
-    const mode = route.url[0]?.path as DateMode || 'day';
+    const mode = (route.url[0]?.path as DateMode) || 'day';
 
     const year = +(route.paramMap.get('year') || new Date().getFullYear());
     const month = +(route.paramMap.get('month') || new Date().getMonth() + 1);
@@ -93,4 +95,3 @@ export class DateRoutingService implements OnDestroy{
     this.subscriptions.unsubscribe();
   }
 }
-

@@ -1,14 +1,14 @@
-:host{
+:host {
   display: block;
   height: 100%;
 }
 
-.page{
+.page {
   width: 100%;
   height: 100%;
 }
 
-.page-content{
+.page-content {
   width: 100%;
   height: calc(100% - 64px);
   min-height: calc(100% - 64px);
@@ -19,31 +19,33 @@
   will-change: width, padding;
 }
 
-.sidebar{
+.sidebar {
   width: 0;
   max-width: 0;
   overflow: hidden;
   transition: max-width 0.4s ease;
 
-  &.sidebar-active{
+  &.sidebar-active {
     width: 256px;
     max-width: 256px;
   }
 }
 
-.content-wrapper{
+.content-wrapper {
   width: calc(100% - 256px);
   padding: 24px;
-  transition: width ease 0.4s, padding ease 0.4s;
+  transition:
+    width ease 0.4s,
+    padding ease 0.4s;
   will-change: width, padding;
 
-  &.collapsed{
+  &.collapsed {
     width: 100%;
     padding: 24px 24px 24px 7px;
   }
 }
 
-.content{
+.content {
   border-radius: 30px;
   background: #fff;
   width: 100%;
@@ -51,7 +53,7 @@
   overflow: auto;
 }
 
-.create-btn{
+.create-btn {
   width: 245px;
   height: 55px;
   position: absolute;
@@ -60,25 +62,29 @@
   z-index: 999;
   border-radius: 50px;
   background: #fff;
-  transition: width ease 0.4s, padding ease 0.4s;
+  transition:
+    width ease 0.4s,
+    padding ease 0.4s;
   will-change: width, padding;
 
- & >.mat-icon{
+  & > .mat-icon {
     font-size: 30px;
     height: 30px;
     width: 30px;
   }
 
-  ::ng-deep .mdc-button__label{
+  ::ng-deep .mdc-button__label {
     font-size: 16px !important;
   }
 
-  &.collapsed{
+  &.collapsed {
     width: 50px;
     padding: 0;
-    transition: width ease 0.4s, padding ease 0.4s;
+    transition:
+      width ease 0.4s,
+      padding ease 0.4s;
 
-    & >.mat-icon{
+    & > .mat-icon {
       margin: 0;
     }
   }

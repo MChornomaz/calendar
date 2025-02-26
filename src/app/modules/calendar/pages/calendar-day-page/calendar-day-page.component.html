@@ -1,1 +1,51 @@
-<p>calendar-day-page works!</p>
+<div class="calendar-day">
+  <div class="calendar-day__heading">
+    <div class="calendar-day__empty-space"></div>
+    <div class="calendar-day__date">
+      <div class="calendar-day__week-day">{{ getShortWeekday() }}</div>
+      <div class="calendar-day__date-number">{{ date()?.getDate() }}</div>
+    </div>
+  </div>
+
+  <div class="calendar-day__content">
+    @if (wholeDayEvents().length > 0) {
+      <div class="calendar-day__event-time-block">
+        @for (event of wholeDayEvents(); track event.id) {
+          <app-calendar-event [calendarEvent]="event"></app-calendar-event>
+        }
+      </div>
+    }
+    <div class="calendar-day__table">
+      <div class="calendar-day__left-section">
+        <div *ngFor="let hour of timeHours" class="calendar-day__time-block">
+          {{ hour.startTime }}
+        </div>
+      </div>
+
+      <div class="calendar-day__right-section">
+        @for (hour of timeHours; track hour.id) {
+          <div
+            class="calendar-day__event-time-block"
+            cdkDropList
+            [cdkDropListConnectedTo]="connectedDropLists"
+            [id]="'hour-' + hour.id"
+            [cdkDropListData]="getEventsForHour(hour)"
+            (cdkDropListDropped)="onDrop($event, hour)"
+            [cdkDropListEnterPredicate]="canEnter"
+            (click)="openCreateAppointmentModal(hour.startTime, hour.endTime)"
+          >
+            @for (event of getEventsForHour(hour); track event.id) {
+              <app-calendar-event
+                cdkDrag
+                [cdkDragData]="event"
+                [calendarEvent]="event"
+                cdkDragLockAxis="y"
+                (click)="openEventInfoModal($event ,event)"
+              ></app-calendar-event>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

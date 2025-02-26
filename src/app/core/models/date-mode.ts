@@ -1,1 +1,1 @@
-export type DateMode  = 'day' | 'week' | 'month' | 'year';
+export type DateMode = 'day' | 'week' | 'month' | 'year';
