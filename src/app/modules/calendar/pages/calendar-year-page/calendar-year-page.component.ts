@@ -30,7 +30,9 @@ export class CalendarYearPageComponent implements OnInit {
 
     this.dateChangeService.currentDate$.subscribe((date) => {
       this.selectedDate.set(date);
-      this.year.set(date.getFullYear());
+      if (date) {
+        this.year.set(date.getFullYear());
+      }
     });
   }
 

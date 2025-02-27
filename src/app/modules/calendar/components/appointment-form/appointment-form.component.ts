@@ -1,7 +1,6 @@
 import { Component, inject, Inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { IAppointmentModalData } from '../../../../core/models/appointment-modal-data.interface';
 import { CalendarEvent } from '../../../../core/models/calendar-event.model';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -42,7 +41,6 @@ export class AppointmentFormComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
   private calendarEventChangeService = inject(CalendarEventChangeService);
 
-  isModal = signal(false);
   formType = signal<'create' | 'edit'>('create');
   dateEditing = signal<boolean>(false);
   eventId = signal<number | null>(null);
@@ -53,11 +51,9 @@ export class AppointmentFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
     public dialogRef: MatDialogRef<AppointmentFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IAppointmentModalData,
   ) {
-    this.isModal.set(!!data);
     this.formType.set(data?.type || 'create');
     this.initForm(data);
   }
@@ -117,11 +113,7 @@ export class AppointmentFormComponent implements OnInit, OnDestroy {
   }
 
   close(data?: CalendarEvent) {
-    if (this.isModal()) {
-      this.dialogRef.close(data);
-    } else {
-      this.router.navigate(['/appointments']);
-    }
+    this.dialogRef.close(data);
   }
 
   private subscribeToStartTimeChanges() {

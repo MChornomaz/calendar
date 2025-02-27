@@ -26,6 +26,11 @@ const routes: Routes = [
         path: ':year/:month/:day',
         component: CalendarDayPageComponent,
       },
+      {
+        path: '',
+        redirectTo: getDefaultDateUrl('day'),
+        pathMatch: 'full',
+      },
     ],
   },
   {
@@ -34,6 +39,11 @@ const routes: Routes = [
       {
         path: ':year/:month/:day',
         component: CalendarWeekPageComponent,
+      },
+      {
+        path: '',
+        redirectTo: getDefaultDateUrl('week'),
+        pathMatch: 'full',
       },
     ],
   },
@@ -44,6 +54,11 @@ const routes: Routes = [
         path: ':year/:month/:day',
         component: CalendarMonthPageComponent,
       },
+      {
+        path: '',
+        redirectTo: getDefaultDateUrl('month'),
+        pathMatch: 'full',
+      },
     ],
   },
   {
@@ -52,6 +67,11 @@ const routes: Routes = [
       {
         path: ':year/:month/:day',
         component: CalendarYearPageComponent,
+      },
+      {
+        path: '',
+        redirectTo: getDefaultDateUrl('year'),
+        pathMatch: 'full',
       },
     ],
   },
@@ -90,3 +110,23 @@ const routes: Routes = [
   ],
 })
 export class CalendarModule {}
+
+function getDefaultDateUrl(mode: string): string {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+
+  switch (mode) {
+    case 'day':
+      return `/day/${year}/${month}/${day}`;
+    case 'week':
+      return `/week/${year}/${month}/${day}`;
+    case 'month':
+      return `/month/${year}/${month}/${day}`;
+    case 'year':
+      return `/year/${year}/${month}/${day}`;
+    default:
+      return `/day/${year}/${month}/${day}`;
+  }
+}

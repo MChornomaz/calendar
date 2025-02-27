@@ -20,11 +20,11 @@ export class AppComponent {
   sidebarExpanded$ = this.sidebarService.expanded$;
   sidebarExpanded = signal<boolean>(true);
   currentDate$ = this.dateChangeService.currentDate$;
-  currentDate = signal<Date>(new Date());
+  currentDate = signal<Date | null>(null);
 
   constructor() {
-    this.sidebarExpanded$.subscribe((expanded) => this.sidebarExpanded.set(expanded));
     this.dateRoutingService.init();
+    this.sidebarExpanded$.subscribe((expanded) => this.sidebarExpanded.set(expanded));
     this.currentDate$.subscribe((date) => {
       this.currentDate.set(date);
     });

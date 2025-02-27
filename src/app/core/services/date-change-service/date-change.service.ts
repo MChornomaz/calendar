@@ -6,8 +6,8 @@ import { DateMode } from '../../models/date-mode';
   providedIn: 'root',
 })
 export class DateChangeService {
-  private currentDateSubject = new BehaviorSubject<Date>(new Date());
-  private dateModeSubject = new BehaviorSubject<DateMode>('day');
+  private currentDateSubject = new BehaviorSubject<Date | null>(null);
+  private dateModeSubject = new BehaviorSubject<DateMode | null>(null);
 
   public currentDate$ = this.currentDateSubject.asObservable();
   public dateMode$ = this.dateModeSubject.asObservable();
@@ -15,17 +15,27 @@ export class DateChangeService {
   public changeDate(date: Date) {
     this.currentDateSubject.next(date);
   }
+
   public changeMode(mode: DateMode) {
     this.dateModeSubject.next(mode);
+  }
+
+  public initializeDate(date: Date) {
+    if (!this.currentDateSubject.value) {
+      this.currentDateSubject.next(date);
+    }
   }
 
   public incrementDate() {
     combineLatest([this.dateModeSubject, this.currentDateSubject])
       .pipe(
-        distinctUntilChanged(([prevMode, prevDate], [currMode, currDate]) => prevMode === currMode && prevDate.getTime() === currDate.getTime()),
+        distinctUntilChanged(([prevMode, prevDate], [currMode, currDate]) => prevMode === currMode && prevDate?.getTime() === currDate?.getTime()),
         take(1),
         switchMap(([mode, date]) => {
-          const newDate = this.addTime(date, mode, 1);
+          if (!date) {
+            date = new Date();
+          }
+          const newDate = this.addTime(date, mode || 'day', 1);
           this.currentDateSubject.next(newDate);
           return this.currentDateSubject;
         }),
@@ -36,10 +46,13 @@ export class DateChangeService {
   public decrementDate() {
     combineLatest([this.dateModeSubject, this.currentDateSubject])
       .pipe(
-        distinctUntilChanged(([prevMode, prevDate], [currMode, currDate]) => prevMode === currMode && prevDate.getTime() === currDate.getTime()),
+        distinctUntilChanged(([prevMode, prevDate], [currMode, currDate]) => prevMode === currMode && prevDate?.getTime() === currDate?.getTime()),
         take(1),
         switchMap(([mode, date]) => {
-          const newDate = this.addTime(date, mode, -1);
+          if (!date) {
+            date = new Date();
+          }
+          const newDate = this.addTime(date, mode || 'day', -1);
           this.currentDateSubject.next(newDate);
           return this.currentDateSubject;
         }),

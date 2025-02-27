@@ -54,9 +54,11 @@ export class SidebarComponent {
   constructor() {
     this.sidebarExpanded$.subscribe((expanded) => this.sidebarExpanded.set(expanded));
     this.currentDate$.subscribe((date) => {
-      this.currentDate.set(date);
-      if (this.calendar) {
-        this.calendar.activeDate = date;
+      if (date) {
+        this.currentDate.set(date);
+        if (this.calendar) {
+          this.calendar.activeDate = date;
+        }
       }
     });
   }

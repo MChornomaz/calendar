@@ -26,15 +26,24 @@ export class DateRoutingService implements OnDestroy {
         first(),
       )
       .subscribe(() => {
-        const { mode, date } = this.parseRoute();
-        if (!this.activatedRoute.snapshot.firstChild?.paramMap.has('year')) {
-          const url = this.generateUrl(mode, new Date());
+        let route = this.activatedRoute;
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+
+        const hasYearParam = route.snapshot.paramMap.has('year');
+        const { mode, date } = this.parseRoute(route);
+        if (!hasYearParam) {
+          const initialDate = new Date();
+          const url = this.generateUrl(mode, initialDate);
           this.router.navigateByUrl(url, { replaceUrl: true });
+          this.dateChangeService.initializeDate(initialDate);
+        } else {
+          this.dateChangeService.initializeDate(date);
+          this.dateChangeService.changeMode(mode);
         }
 
         this.dateChangeService.changeMode(mode);
-        this.dateChangeService.changeDate(date);
-
         this.isInitialSyncDone = true;
         this.syncDateToUrl();
       });
@@ -45,24 +54,23 @@ export class DateRoutingService implements OnDestroy {
       .pipe(
         filter(() => this.isInitialSyncDone),
         distinctUntilChanged(([prevMode, prevDate], [currMode, currDate]) => {
-          return prevMode === currMode && prevDate.getTime() === currDate.getTime();
+          return prevMode === currMode && prevDate?.getTime() === currDate?.getTime();
         }),
       )
       .subscribe(([mode, date]) => {
-        this.updateUrl(mode, date);
+        if (date) {
+          this.updateUrl(mode || 'day', date);
+        }
       });
 
     this.subscriptions.add(sub);
   }
 
-  private parseRoute(): { mode: DateMode; date: Date } {
-    const route = this.activatedRoute.snapshot.firstChild || this.activatedRoute.snapshot;
-
-    const mode = (route.url[0]?.path as DateMode) || 'day';
-
-    const year = +(route.paramMap.get('year') || new Date().getFullYear());
-    const month = +(route.paramMap.get('month') || new Date().getMonth() + 1);
-    const day = +(route.paramMap.get('day') || new Date().getDate());
+  private parseRoute(route: ActivatedRoute): { mode: DateMode; date: Date } {
+    const mode = (route.snapshot.parent?.url[0]?.path as DateMode) || 'day';
+    const year = +(route.snapshot.paramMap.get('year') || new Date().getFullYear());
+    const month = +(route.snapshot.paramMap.get('month') || new Date().getMonth() + 1);
+    const day = +(route.snapshot.paramMap.get('day') || new Date().getDate());
 
     return { mode, date: new Date(year, month - 1, day) };
   }

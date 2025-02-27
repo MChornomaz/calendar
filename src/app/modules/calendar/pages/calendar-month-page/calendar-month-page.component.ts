@@ -93,19 +93,45 @@ export class CalendarMonthPageComponent {
       });
   }
 
-  onDrop(event: CdkDragDrop<CalendarEvent[]>, day: Date) {
+  onDrop(event: CdkDragDrop<Date>) {
     const draggedEvent = event.item.data as CalendarEvent;
-    if (draggedEvent) {
-      const modalData: IAppointmentModalData = {
-        type: 'edit',
-        data: {
-          ...draggedEvent,
-          date: day,
-        },
-      };
 
-      this.appointmentModalService.openAppointmentDialog(modalData).subscribe();
+    const mouseEvent = event.event as MouseEvent;
+    const x = mouseEvent.clientX;
+    const y = mouseEvent.clientY;
+
+    const targetElement = document.elementFromPoint(x, y);
+
+    const targetDayElement = this.findParentDayElement(targetElement);
+
+    if (targetDayElement) {
+      const targetDayValue = targetDayElement.getAttribute('data-date');
+      if (targetDayValue) {
+        const targetDay = new Date(targetDayValue);
+
+        if (draggedEvent) {
+          const modalData: IAppointmentModalData = {
+            type: 'edit',
+            data: CalendarEvent.create({
+              ...draggedEvent,
+              date: targetDay,
+            }),
+          };
+          this.appointmentModalService.openAppointmentDialog(modalData).subscribe();
+        }
+      } else {
+        console.error('data-date attribute is missing on target day');
+      }
+    } else {
+      console.error('Target day not found');
     }
+  }
+
+  private findParentDayElement(element: Element | null): HTMLElement | null {
+    while (element && !element.hasAttribute('data-date')) {
+      element = element.parentElement;
+    }
+    return element as HTMLElement | null;
   }
 
   openEventInfoModal(event: MouseEvent, calendarEvent: CalendarEvent) {

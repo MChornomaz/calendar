@@ -33,8 +33,16 @@ export class HeaderComponent {
   ]);
 
   constructor() {
-    this.currentDate$.subscribe((date) => this.currentDate.set(date));
-    this.dateMode$.subscribe((mode) => this.dateMode.set(mode));
+    this.currentDate$.subscribe((date) => {
+      if (date) {
+        this.currentDate.set(date);
+      }
+    });
+    this.dateMode$.subscribe((mode) => {
+      if (mode) {
+        this.dateMode.set(mode);
+      }
+    });
   }
 
   changeMode($event: MatSelectChange) {

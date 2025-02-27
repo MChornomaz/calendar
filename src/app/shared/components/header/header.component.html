@@ -21,9 +21,6 @@
         <h2 class="header__date">{{ currentDate() | date: 'MMMM dd, yyyy' }}</h2>
       </div>
       <div class="header__controls-right">
-        <button mat-mini-fab aria-label="Search button" class="header__search-button">
-          <mat-icon>search</mat-icon>
-        </button>
         <mat-form-field class="header__mode-select" appearance="outline" [hideRequiredMarker]="true">
           <mat-select [value]="dateMode()" (selectionChange)="changeMode($event)" disableOptionCentering class="header__mode-select-panel">
             @for (mode of modeDropdown(); track mode.value) {
