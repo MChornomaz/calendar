@@ -171,4 +171,9 @@ export class CalendarWeekPageComponent {
       }
     });
   }
+
+  getWholeDayEventsForDay(day: Date): CalendarEvent[] {
+    const eventsForDay = this.eventsByDay()[day.toISOString()] || [];
+    return eventsForDay.filter((event) => event.duration === 'day');
+  }
 }

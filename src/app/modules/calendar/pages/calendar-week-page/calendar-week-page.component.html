@@ -10,6 +10,16 @@
   </div>
 
   <div class="calendar-week__content">
+    <div class="calendar-week__whole-day-events">
+      <div class="calendar-week__empty-space border-bottom">Day</div>
+      @for (day of weekDays(); track day) {
+        <div class="calendar-week__whole-day-events-day">
+          @for (event of getWholeDayEventsForDay(day); track event.id) {
+            <app-calendar-event (click)="openEventInfoModal($event, event)" [calendarEvent]="event"></app-calendar-event>
+          }
+        </div>
+      }
+    </div>
     <div class="calendar-week__table">
       <div class="calendar-week__left-section">
         <div *ngFor="let hour of timeHours" class="calendar-week__time-block">
