@@ -198,6 +198,21 @@ export class DBService {
     return this.searchEvents('date', IDBKeyRange.bound(startIso, endIso));
   }
 
+  public searchEventsByWeek(date: Date): Observable<CalendarEvent[]> {
+    const startOfWeek = new Date(date);
+    startOfWeek.setDate(date.getDate() - date.getDay() + 1);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    const startIso = startOfWeek.toISOString();
+    const endIso = endOfWeek.toISOString();
+
+    return this.searchEvents('date', IDBKeyRange.bound(startIso, endIso));
+  }
+
   public searchEvents(field: keyof CalendarEvent, value: any): Observable<CalendarEvent[]> {
     return this.waitForDB().pipe(
       switchMap(

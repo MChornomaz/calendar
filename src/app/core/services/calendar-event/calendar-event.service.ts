@@ -65,6 +65,14 @@ export class CalendarEventService {
     );
   }
 
+  public searchEventsByWeek(date: Date): Observable<CalendarEvent[]> {
+    return this.dbService.searchEventsByWeek(date).pipe(
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
+  }
+
   private loadAllEvents(): void {
     this.dbService.loadAllEvents();
   }

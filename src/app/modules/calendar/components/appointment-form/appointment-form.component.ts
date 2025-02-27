@@ -5,12 +5,13 @@ import { Router } from '@angular/router';
 import { IAppointmentModalData } from '../../../../core/models/appointment-modal-data.interface';
 import { CalendarEvent } from '../../../../core/models/calendar-event.model';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { CustomDateAdapter } from '../../../../core/services/date-adapter/date-adapter';
+import { CustomDateAdapter } from '../../../../core/models/date-adapter/date-adapter';
 import { endTimeValidator, timeValidator } from './validatior/time-range.validator';
 import { Subscription } from 'rxjs';
 import { CalendarEventService } from '../../../../core/services/calendar-event/calendar-event.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CalendarEventChangeService } from '../../../../core/services/calendar-event-change-service/calendar-event-change.service';
+import { generateTimeHours } from '../../../../core/utils/time.utils';
 
 export const DATE_FORMATS = {
   parse: {
@@ -48,18 +49,7 @@ export class AppointmentFormComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
-  timeHours = Array.from({ length: 24 }, (_, i) => {
-    const startHour = i % 12 || 12;
-    const period = i < 12 ? 'AM' : 'PM';
-    const endHour = (i + 1) % 12 || 12;
-    const endPeriod = i + 1 < 12 ? 'AM' : 'PM';
-
-    return {
-      id: i,
-      startTime: `${startHour}:00 ${period}`,
-      endTime: `${endHour}:00 ${endPeriod}`,
-    };
-  });
+  timeHours = generateTimeHours();
 
   constructor(
     private fb: FormBuilder,

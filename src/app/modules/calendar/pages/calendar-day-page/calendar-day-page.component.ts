@@ -92,11 +92,7 @@ export class CalendarDayPageComponent {
       },
     };
 
-    this.appointmentModalService.openAppointmentDialog(modalData).subscribe((result) => {
-      if (result) {
-        this.events.update((events) => [...events, result]);
-      }
-    });
+    this.appointmentModalService.openAppointmentDialog(modalData).subscribe();
   }
 
   openEventInfoModal(event: MouseEvent, calendarEvent: CalendarEvent) {
