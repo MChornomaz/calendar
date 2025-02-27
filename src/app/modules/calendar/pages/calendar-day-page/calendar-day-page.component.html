@@ -9,9 +9,9 @@
 
   <div class="calendar-day__content">
     @if (wholeDayEvents().length > 0) {
-      <div class="calendar-day__event-time-block">
+      <div class="calendar-day__whole-day-events">
         @for (event of wholeDayEvents(); track event.id) {
-          <app-calendar-event [calendarEvent]="event"></app-calendar-event>
+          <app-calendar-event (click)="openEventInfoModal($event, event)" [calendarEvent]="event"></app-calendar-event>
         }
       </div>
     }
@@ -35,13 +35,7 @@
             (click)="openCreateAppointmentModal(hour.startTime, hour.endTime)"
           >
             @for (event of getEventsForHour(hour); track event.id) {
-              <app-calendar-event
-                cdkDrag
-                [cdkDragData]="event"
-                [calendarEvent]="event"
-                cdkDragLockAxis="y"
-                (click)="openEventInfoModal($event ,event)"
-              ></app-calendar-event>
+              <app-calendar-event cdkDrag [cdkDragData]="event" [calendarEvent]="event" cdkDragLockAxis="y" (click)="openEventInfoModal($event, event)"></app-calendar-event>
             }
           </div>
         }

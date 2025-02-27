@@ -2,6 +2,8 @@
   display: flex;
   width: calc(100% - 16px);
   height: 48px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 .calendar-event {
@@ -13,8 +15,14 @@
   padding: 10px;
   background-color: #265713;
   color: #ffffff;
+  border-radius: 10px;
+
+  &:hover {
+    background-color: rgba(38, 87, 19, 0.83);
+  }
 
   &__content {
+    padding-left: 10px;
   }
 
   &__title {

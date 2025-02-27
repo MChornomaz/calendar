@@ -27,11 +27,9 @@ export class DBService {
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBRequest).result;
 
-        // Якщо об'єктного сховища ще не існує, створюємо його
         if (!db.objectStoreNames.contains(this.storeName)) {
           const store = db.createObjectStore(this.storeName, { keyPath: 'id' });
 
-          // Створюємо індекси для кожного з полів
           store.createIndex('startTime', 'startTime');
           store.createIndex('endTime', 'endTime');
           store.createIndex('date', 'date');
@@ -56,7 +54,6 @@ export class DBService {
     });
   }
 
-
   private waitForDB(): Observable<IDBDatabase> {
     return this.dbReady$.pipe(
       filter((ready) => ready),
@@ -80,24 +77,18 @@ export class DBService {
             };
 
             if (formattedEvent.startTime) {
-              const index = store.index('startTime');
-              const request = index.openCursor(IDBKeyRange.only(formattedEvent.startTime));
+              const index = store.index('date');
+              const request = index.getAll(formattedEvent.date);
 
-              request.onsuccess = (e) => {
-                const cursor = (e.target as IDBRequest).result;
+              request.onsuccess = () => {
+                const eventsOnSameDate = request.result;
 
-                while (cursor) {
-                  const existingEvent = cursor.value;
-                  const existingDate = new Date(existingEvent.date).toISOString();
-                  const formattedEventDate = new Date(formattedEvent.date).toISOString();
+                const isTimeTaken = eventsOnSameDate.some((existingEvent) => existingEvent.startTime === formattedEvent.startTime);
 
-                  if (existingDate === formattedEventDate && existingEvent.startTime === formattedEvent.startTime) {
-                    observer.error(new Error('This time is already taken by another event.'));
-                    return;
-                  }
-                  cursor.continue();
+                if (isTimeTaken) {
+                  observer.error(new Error('This time is already taken by another event.'));
+                  return;
                 }
-
                 addEventToStore();
               };
 
@@ -117,12 +108,10 @@ export class DBService {
             }
 
             transaction.onerror = () => observer.error(new Error('Transaction failed.'));
-          })
-      )
+          }),
+      ),
     );
   }
-
-
 
   public updateEvent(event: CalendarEvent): Observable<void> {
     return this.waitForDB().pipe(
@@ -132,22 +121,23 @@ export class DBService {
             const transaction = db.transaction([this.storeName], 'readwrite');
             const store = transaction.objectStore(this.storeName);
 
-            // Конвертуємо дату у формат ISO перед оновленням
             const updatedEvent = {
               ...event,
               date: event.date.toISOString(),
-              startTime: event.startTime || null, // Якщо startTime відсутній, збережемо null
-              endTime: event.endTime || null,     // Аналогічно для endTime
+              startTime: event.startTime || null,
+              endTime: event.endTime || null,
             };
 
             if (updatedEvent.startTime) {
-              const index = store.index('startTime');
-              const request = index.get(updatedEvent.startTime);
+              const index = store.index('date');
+              const request = index.getAll(updatedEvent.date);
 
               request.onsuccess = () => {
-                const existingEvent = request.result;
+                const eventsOnSameDate = request.result;
 
-                if (existingEvent && existingEvent.id !== updatedEvent.id) {
+                const isTimeTaken = eventsOnSameDate.some((existingEvent) => existingEvent.startTime === updatedEvent.startTime && existingEvent.id !== updatedEvent.id);
+
+                if (isTimeTaken) {
                   observer.error('This time is already taken by another event.');
                   return;
                 }
@@ -157,7 +147,7 @@ export class DBService {
                   observer.next();
                   observer.complete();
                 };
-                transaction.onerror = (event) => observer.error(event);
+                transaction.onerror = (error) => observer.error(error);
               };
 
               request.onerror = () => observer.error('Error checking for existing event.');
@@ -167,15 +157,12 @@ export class DBService {
                 observer.next();
                 observer.complete();
               };
-              transaction.onerror = (event) => observer.error(event);
+              transaction.onerror = (error) => observer.error(error);
             }
           }),
       ),
     );
   }
-
-
-
 
   public deleteEvent(id: number): Observable<void> {
     return this.waitForDB().pipe(
@@ -205,7 +192,6 @@ export class DBService {
     const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 59, 999);
 
-    // Перетворюємо дату на ISO рядки для коректного порівняння
     const startIso = startOfDay.toISOString();
     const endIso = endOfDay.toISOString();
 
@@ -236,11 +222,12 @@ export class DBService {
                 results.push(cursor.value);
                 cursor.continue();
               } else {
-                // Перетворюємо всі дати у Date об'єкти після отримання
-                observer.next(results.map(item => ({
-                  ...item,
-                  date: new Date(item.date), // Повертаємо назад у Date
-                })));
+                observer.next(
+                  results.map((item) => ({
+                    ...item,
+                    date: new Date(item.date),
+                  })),
+                );
                 observer.complete();
               }
             };
@@ -250,8 +237,6 @@ export class DBService {
       ),
     );
   }
-
-
 
   public loadAllEvents(): void {
     this.waitForDB().subscribe((db) => {

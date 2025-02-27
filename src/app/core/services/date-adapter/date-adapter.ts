@@ -1,4 +1,4 @@
-import { NativeDateAdapter, DateAdapter } from '@angular/material/core';
+import { NativeDateAdapter } from '@angular/material/core';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -7,12 +7,12 @@ export class CustomDateAdapter extends NativeDateAdapter {
     return value ? new Date(value) : null;
   }
 
-  override format(date: Date, displayFormat: Object): string {
+  override format(date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long', // Назва дня
-      year: 'numeric', // Рік
-      month: 'long', // Місяць
-      day: 'numeric', // День місяця
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     };
 
     return new Intl.DateTimeFormat('en-US', options).format(date);

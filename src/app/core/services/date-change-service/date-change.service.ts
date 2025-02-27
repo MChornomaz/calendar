@@ -1,7 +1,6 @@
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, distinctUntilChanged, Subject, switchMap, take } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, switchMap, take } from 'rxjs';
 import { DateMode } from '../../models/date-mode';
-import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',

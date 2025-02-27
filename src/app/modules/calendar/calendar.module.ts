@@ -16,7 +16,7 @@ import { MatOption, MatSelect } from '@angular/material/select';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
-import {EventInfoCardComponent} from './components/event-info-card/event-info-card.component';
+import { EventInfoCardComponent } from './components/event-info-card/event-info-card.component';
 
 const routes: Routes = [
   {
@@ -65,7 +65,7 @@ const routes: Routes = [
     CalendarYearPageComponent,
     CalendarEventComponent,
     AppointmentFormComponent,
-    EventInfoCardComponent
+    EventInfoCardComponent,
   ],
   imports: [
     CommonModule,

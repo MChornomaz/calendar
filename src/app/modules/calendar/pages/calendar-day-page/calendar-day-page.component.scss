@@ -59,6 +59,15 @@
     display: block;
   }
 
+  &__whole-day-events {
+    width: 100%;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 2px;
+  }
+
   &__table {
     width: 100%;
     min-width: 100%;

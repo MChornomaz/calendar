@@ -16,13 +16,12 @@
   }
 
   &__edit-btn {
-    color:green;
+    color: green;
   }
 
   &__delete-btn {
     color: red;
   }
-
 
   &__content {
     width: 100%;
@@ -56,14 +55,14 @@
     gap: 5px;
   }
 
-  &__row{
+  &__row {
     width: 100%;
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  &__icon{
+  &__icon {
     width: 40px;
     min-height: 40px;
     display: flex;
@@ -95,7 +94,7 @@
     font-size: 20px;
   }
 
-  &__confirmation-buttons{
+  &__confirmation-buttons {
     display: flex;
     gap: 10px;
     align-items: center;
@@ -110,8 +109,7 @@
     background-color: green;
   }
 
-  p{
+  p {
     margin: 0;
   }
 }
-

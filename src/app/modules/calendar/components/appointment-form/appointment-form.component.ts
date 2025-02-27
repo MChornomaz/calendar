@@ -9,6 +9,8 @@ import { CustomDateAdapter } from '../../../../core/services/date-adapter/date-a
 import { endTimeValidator, timeValidator } from './validatior/time-range.validator';
 import { Subscription } from 'rxjs';
 import { CalendarEventService } from '../../../../core/services/calendar-event/calendar-event.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CalendarEventChangeService } from '../../../../core/services/calendar-event-change-service/calendar-event-change.service';
 
 export const DATE_FORMATS = {
   parse: {
@@ -36,6 +38,9 @@ export const DATE_FORMATS = {
 export class AppointmentFormComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   private calendarEventService = inject(CalendarEventService);
+  private snackBar = inject(MatSnackBar);
+  private calendarEventChangeService = inject(CalendarEventChangeService);
+
   isModal = signal(false);
   formType = signal<'create' | 'edit'>('create');
   dateEditing = signal<boolean>(false);
@@ -101,29 +106,27 @@ export class AppointmentFormComponent implements OnInit, OnDestroy {
 
   submit() {
     if (this.form.valid) {
-      if (this.formType() === 'create') {
-        const calendarEvent = CalendarEvent.create({
-          ...this.form.value,
-          duration: this.form.get('duration')?.value ? 'day' : 'fixed',
-        });
+      const calendarEvent = CalendarEvent.create({
+        ...this.form.value,
+        duration: this.form.get('duration')?.value ? 'day' : 'fixed',
+        id: this.formType() === 'edit' ? this.eventId() : undefined,
+      });
 
-        this.calendarEventService.addEvent(calendarEvent).subscribe(() => {
-          this.close({type: 'create', data: calendarEvent});
-        });
-      } else if (this.formType() === 'edit') {
-        const calendarEvent = {
-          ...this.form.value,
-          duration: this.form.get('duration')?.value ? 'day' : 'fixed',
-          id: this.eventId(),
-        };
-        this.calendarEventService.updateEvent(calendarEvent).subscribe(() => {
-          this.close({type: 'edit', data: calendarEvent});
-        });
-      }
+      const eventObservable = this.formType() === 'create' ? this.calendarEventService.addEvent(calendarEvent) : this.calendarEventService.updateEvent(calendarEvent);
+
+      eventObservable.subscribe({
+        next: () => {
+          this.calendarEventChangeService.notifyChange();
+          this.close(calendarEvent);
+        },
+        error: (err) => {
+          this.showError(err.message || 'This time is already taken by another event.');
+        },
+      });
     }
   }
 
-  close(data?: { type: 'create' | 'edit', data: CalendarEvent }) {
+  close(data?: CalendarEvent) {
     if (this.isModal()) {
       this.dialogRef.close(data);
     } else {
@@ -133,10 +136,14 @@ export class AppointmentFormComponent implements OnInit, OnDestroy {
 
   private subscribeToStartTimeChanges() {
     const startTimeChangeSub = this.form.get('startTime')?.valueChanges.subscribe((startTime) => {
-      if (!startTime) return;
+      if (!startTime) {
+        return;
+      }
 
       const startIndex = this.timeHours.findIndex((t) => t.startTime === startTime);
-      if (startIndex === -1 || startIndex + 1 >= this.timeHours.length) return;
+      if (startIndex === -1 || startIndex + 1 >= this.timeHours.length) {
+        return;
+      }
 
       const nextHour = this.timeHours[startIndex + 1].startTime;
 
@@ -166,6 +173,13 @@ export class AppointmentFormComponent implements OnInit, OnDestroy {
 
       this.form.get('startTime')?.updateValueAndValidity();
       this.form.get('endTime')?.updateValueAndValidity();
+    });
+  }
+
+  showError(message: string) {
+    this.snackBar.open(message, 'Закрити', {
+      duration: 3000,
+      panelClass: ['error-snackbar'],
     });
   }
 

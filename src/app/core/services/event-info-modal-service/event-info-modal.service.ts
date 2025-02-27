@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AppointmentFormComponent } from '../../../modules/calendar/components/appointment-form/appointment-form.component';
-import {CalendarEvent} from '../../models/calendar-event.model';
-import {EventInfoCardComponent} from '../../../modules/calendar/components/event-info-card/event-info-card.component';
+import { CalendarEvent } from '../../models/calendar-event.model';
+import { EventInfoCardComponent } from '../../../modules/calendar/components/event-info-card/event-info-card.component';
 
 @Injectable({
   providedIn: 'root',

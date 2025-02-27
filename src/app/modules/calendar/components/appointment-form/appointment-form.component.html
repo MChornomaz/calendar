@@ -77,7 +77,7 @@
 
     <div class="form-actions">
       <button class="form-container__submit" mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Save</button>
-      @if(formType() === 'edit') {
+      @if (formType() === 'edit') {
         <button class="form-container__cancel" mat-raised-button color="color" type="button" (click)="close()">Cancel</button>
       }
     </div>

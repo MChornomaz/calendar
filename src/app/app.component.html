@@ -1,7 +1,7 @@
 <div class="page">
   <app-header></app-header>
   <div class="page-content">
-    <button mat-raised-button aria-label="Create event button" class="create-btn" [ngClass]="{ collapsed: !sidebarExpanded() }">
+    <button mat-raised-button aria-label="Create event button" class="create-btn" [ngClass]="{ collapsed: !sidebarExpanded() }" (click)="createEvent()">
       <mat-icon>add</mat-icon>
       @if (sidebarExpanded()) {
         Create

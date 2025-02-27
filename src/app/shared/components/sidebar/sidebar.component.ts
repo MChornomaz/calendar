@@ -1,11 +1,10 @@
-import { Component, effect, inject, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { MatCalendar, MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SidebarService } from '../../../core/services/sidebar-service/sidebar.service';
 import { DateChangeService } from '../../../core/services/date-change-service/date-change.service';
-import { DateMode } from '../../../core/models/date-mode';
 
 @Component({
   selector: 'app-sidebar',
@@ -65,7 +64,9 @@ export class SidebarComponent {
   @ViewChild('calendar') calendar: MatCalendar<Date> | undefined;
 
   selectDate(date: Date | null) {
-    if (date === null) return;
+    if (date === null) {
+      return;
+    }
     this.dateChangeService.changeDate(date);
   }
 }

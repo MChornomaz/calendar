@@ -27,12 +27,12 @@
       </div>
       <div class="info-card__text-content">
         <div class="info-card__date">
-          <p class="info-card__date-text">{{calendarEvent()?.date | date: 'MMMM dd, yyyy'}}</p>
-          @if(calendarEvent()?.duration === 'fixed') {
+          <p class="info-card__date-text">{{ calendarEvent()?.date | date: 'MMMM dd, yyyy' }}</p>
+          @if (calendarEvent()?.duration === 'fixed') {
             <div class="info-card__range">
-              <p>{{calendarEvent()?.startTime | lowercase}}</p>
+              <p>{{ calendarEvent()?.startTime | lowercase }}</p>
               <p>-</p>
-              <p>{{calendarEvent()?.endTime | lowercase}}</p>
+              <p>{{ calendarEvent()?.endTime | lowercase }}</p>
             </div>
           }
         </div>
@@ -43,12 +43,12 @@
         <mat-icon>subject</mat-icon>
       </div>
       <div class="info-card__text-content">
-        <p class="info-card__description">{{calendarEvent()?.description}}</p>
+        <p class="info-card__description">{{ calendarEvent()?.description }}</p>
       </div>
     </div>
   </div>
 
-  @if(deleteMode()){
+  @if (deleteMode()) {
     <div class="info-card__delete-confirmation">
       <p class="info-card__confirmation-title">Are you sure you want to delete this event?</p>
       <div class="info-card__confirmation-buttons">

@@ -12,6 +12,8 @@ ignorePatterns:
   - '*.html'
 rules:
   '@typescript-eslint/no-explicit-any': 'off'
+  '@angular-eslint/prefer-standalone': 'off'
+  '@typescript-eslint/no-wrapper-object-types': 'off'
   '@typescript-eslint/no-non-null-assertion': 'warn'
   '@typescript-eslint/no-non-null-asserted-optional-chain': 'warn'
   '@angular-eslint/component-class-suffix': error

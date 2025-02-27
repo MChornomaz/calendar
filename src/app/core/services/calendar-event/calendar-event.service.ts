@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { CalendarEvent } from '../../models/calendar-event.model';
 import { DBService } from '../db/db.service';
 
@@ -18,27 +18,51 @@ export class CalendarEventService {
   }
 
   public getAllEvents(): Observable<CalendarEvent[]> {
-    return this.dbService.events$;
+    return this.dbService.events$.pipe(
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
   }
 
   public addEvent(event: CalendarEvent): Observable<void> {
-    return this.dbService.addEvent(event);
+    return this.dbService.addEvent(event).pipe(
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
   }
 
   public updateEvent(event: CalendarEvent): Observable<void> {
-    return this.dbService.updateEvent(event);
+    return this.dbService.updateEvent(event).pipe(
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
   }
 
   public deleteEvent(id: number): Observable<void> {
-    return this.dbService.deleteEvent(id);
+    return this.dbService.deleteEvent(id).pipe(
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
   }
 
   public searchEvents(field: keyof CalendarEvent, value: any): Observable<CalendarEvent[]> {
-    return this.dbService.searchEvents(field, value);
+    return this.dbService.searchEvents(field, value).pipe(
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
   }
 
   public searchEventsByDate(date: Date): Observable<CalendarEvent[]> {
-    return this.dbService.searchEventsByDate(date);
+    return this.dbService.searchEventsByDate(date).pipe(
+      catchError((err) => {
+        return throwError(() => err);
+      }),
+    );
   }
 
   private loadAllEvents(): void {

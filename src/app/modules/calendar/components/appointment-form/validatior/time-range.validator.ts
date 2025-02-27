@@ -13,7 +13,9 @@ export const endTimeValidator = (timeHours: { startTime: string; endTime: string
     const startTime = control.parent?.get('startTime')?.value;
     const endTime = control.value;
 
-    if (!startTime || !endTime) return null;
+    if (!startTime || !endTime) {
+      return null;
+    }
 
     const startIndex = timeHours.findIndex((t) => t.startTime === startTime);
     const endIndex = timeHours.findIndex((t) => t.endTime === endTime);
