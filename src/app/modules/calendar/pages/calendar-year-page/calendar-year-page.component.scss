@@ -1,0 +1,48 @@
+.calendar-year {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 20px;
+
+  &__month {
+    flex: 1 1 calc(20% - 40px);
+    box-sizing: border-box;
+
+    h2 {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+
+      td {
+        cursor: pointer;
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+
+        &.current-month {
+          color: #000;
+        }
+
+        &:not(.current-month) {
+          color: #ccc;
+        }
+
+        &.selected {
+          background-color: #3f51b5;
+          color: #fff;
+        }
+      }
+    }
+  }
+}

@@ -117,7 +117,7 @@ export class CalendarWeekPageComponent {
 
         const match = targetId.match(/day-(.+)-hour-(\d+)/);
         if (match) {
-          const [, targetDayISO, targetHourId] = match; // Просто не оголошуємо `_`
+          const [, targetDayISO, targetHourId] = match;
 
           if (targetDayISO && targetHourId) {
             const targetDay = new Date(targetDayISO);

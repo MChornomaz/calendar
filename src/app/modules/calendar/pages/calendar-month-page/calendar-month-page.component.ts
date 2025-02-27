@@ -9,6 +9,7 @@ import { CalendarEventChangeService } from '../../../../core/services/calendar-e
 import { combineLatest, startWith, switchMap } from 'rxjs';
 import { parseTime } from '../../../../core/utils/time.utils';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { getWeeksForMonth } from '../../../../core/utils/date.utils';
 
 @Component({
   selector: 'app-calendar-month-page',
@@ -23,10 +24,10 @@ export class CalendarMonthPageComponent {
   eventInfoModalService = inject(EventInfoModalService);
   eventChangeService = inject(CalendarEventChangeService);
 
-  monthStartDate = signal<Date | null>(null); // Початкова дата місяця
-  weeks = computed(() => this.generateWeeks(this.monthStartDate())); // Тижні місяця
-  events = signal<CalendarEvent[]>([]); // Всі події за місяць
-  eventsByDay = computed(() => this.groupEventsByDay(this.events())); // Події, згруповані по днях
+  monthStartDate = signal<Date>(new Date());
+  weeks = computed(() => getWeeksForMonth(this.monthStartDate()));
+  events = signal<CalendarEvent[]>([]);
+  eventsByDay = computed(() => this.groupEventsByDay(this.events()));
 
   constructor() {
     combineLatest([this.activatedRoute.params, this.eventChangeService.eventChange$.pipe(startWith(null))])
@@ -36,7 +37,7 @@ export class CalendarMonthPageComponent {
           const month = parseInt(params['month'], 10) - 1;
 
           const currentDate = new Date(year, month, 1);
-          this.monthStartDate.set(this.getStartOfMonth(currentDate)); // Встановлюємо початкову дату місяця
+          this.monthStartDate.set(this.getStartOfMonth(currentDate));
 
           return this.calendarEventService.searchEventsByMonth(currentDate);
         }),
@@ -52,34 +53,6 @@ export class CalendarMonthPageComponent {
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
     return startOfMonth;
-  }
-
-  private generateWeeks(startDate: Date | null): Date[][] {
-    if (!startDate) {
-      return [];
-    }
-    const weeks: Date[][] = [];
-    let currentWeek: Date[] = [];
-
-    const firstDayOfMonth = new Date(startDate);
-    firstDayOfMonth.setDate(1);
-
-    const firstDayOfWeek = new Date(firstDayOfMonth);
-    firstDayOfWeek.setDate(firstDayOfMonth.getDate() - firstDayOfMonth.getDay() + (firstDayOfMonth.getDay() === 0 ? -6 : 1));
-
-    for (let i = 0; i < 35; i++) {
-      const currentDate = new Date(firstDayOfWeek);
-      currentDate.setDate(firstDayOfWeek.getDate() + i);
-
-      currentWeek.push(currentDate);
-
-      if (currentWeek.length === 7) {
-        weeks.push(currentWeek);
-        currentWeek = [];
-      }
-    }
-
-    return weeks;
   }
 
   private groupEventsByDay(events: CalendarEvent[]): { [key: string]: CalendarEvent[] } {

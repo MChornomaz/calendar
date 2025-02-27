@@ -1,1 +1,37 @@
-<p>calendar-year-page works!</p>
+<div class="calendar-year">
+  @for (month of months(); track month.startDate.getTime()) {
+    <div class="calendar-year__month">
+      <h2>{{ month.name }}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (week of month.weeks; track week[0].getTime()) {
+            <tr>
+              @for (day of week; track day.getTime()) {
+                <td
+                  [ngClass]="{
+                    'current-month': checkCurrentMonth(day, month),
+                    selected: isSelected(day, month),
+                  }"
+                  (click)="onDateClick(day)"
+                >
+                  <div>{{ day.getDate() }}</div>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
