@@ -41,7 +41,7 @@ const routes: Routes = [
     path: 'month',
     children: [
       {
-        path: '::year/:month/:day',
+        path: ':year/:month/:day',
         component: CalendarMonthPageComponent,
       },
     ],

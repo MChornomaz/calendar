@@ -1,0 +1,44 @@
+.calendar-month {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__weekday {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    border-right: 1px solid #ccc;
+  }
+
+  &__weeks {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__week {
+    display: flex;
+    flex: 1;
+  }
+
+  &__day {
+    flex: 1;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 8px;
+    max-width: calc(100% / 7);
+  }
+
+  &__day-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__day-number {
+    font-weight: bold;
+  }
+
+  &__events {
+    margin-top: 8px;
+  }
+}

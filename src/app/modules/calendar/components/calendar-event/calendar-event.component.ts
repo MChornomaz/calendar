@@ -9,4 +9,5 @@ import { CalendarEvent } from '../../../../core/models/calendar-event.model';
 })
 export class CalendarEventComponent {
   calendarEvent = input.required<CalendarEvent>();
+  type = input<'default' | 'transparent'>('default');
 }

@@ -213,6 +213,26 @@ export class DBService {
     return this.searchEvents('date', IDBKeyRange.bound(startIso, endIso));
   }
 
+  public searchEventsByMonth(date: Date): Observable<CalendarEvent[]> {
+    if (isNaN(date.getTime())) {
+      throw new Error('Invalid date');
+    }
+
+    const startOfMonth = new Date(date);
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const endOfMonth = new Date(startOfMonth);
+    endOfMonth.setMonth(startOfMonth.getMonth() + 1);
+    endOfMonth.setDate(0);
+    endOfMonth.setHours(23, 59, 59, 999);
+
+    const startIso = startOfMonth.toISOString();
+    const endIso = endOfMonth.toISOString();
+
+    return this.searchEvents('date', IDBKeyRange.bound(startIso, endIso));
+  }
+
   public searchEvents(field: keyof CalendarEvent, value: any): Observable<CalendarEvent[]> {
     return this.waitForDB().pipe(
       switchMap(

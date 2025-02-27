@@ -1,1 +1,25 @@
-<p>calendar-month-page works!</p>
+<div class="calendar-month">
+  <div class="calendar-month__weeks">
+    @for (week of weeks(); track week) {
+      <div class="calendar-month__week">
+        @for (day of week; track day.toISOString()) {
+          <div class="calendar-month__day" cdkDropList (cdkDropListDropped)="onDrop($event, day)" (click)="openCreateAppointmentModal(day)">
+            <div class="calendar-month__day-header">
+              <div class="calendar-month__day-number">{{ day.getDate() }}</div>
+            </div>
+
+            <div class="calendar-month__events">
+              @for (event of getWholeDayEventsForDay(day); track event.id) {
+                <app-calendar-event cdkDrag [cdkDragData]="event" (click)="openEventInfoModal($event, event)" [calendarEvent]="event"></app-calendar-event>
+              }
+
+              @for (event of getFixedEventsForDay(day); track event.id) {
+                <app-calendar-event cdkDrag [cdkDragData]="event" (click)="openEventInfoModal($event, event)" [calendarEvent]="event" [type]="'transparent'"></app-calendar-event>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
